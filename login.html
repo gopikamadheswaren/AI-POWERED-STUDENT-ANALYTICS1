@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | NexusEdu AI Success Analytics Platform</title>
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔐</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static/style.css">
+  <style>
+    .login-container {
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 20px;
+      width: 100%;
+    }
+    .login-hero {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .login-hero h1 {
+      font-family: var(--font-heading);
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .login-hero p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+    .role-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px 18px;
+      text-align: center;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+    }
+    .role-card:hover, .role-card.selected {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--card-accent, var(--accent-purple));
+    }
+    .role-card.selected {
+      border-width: 2px;
+    }
+    .role-icon-lg {
+      width: 58px;
+      height: 58px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 14px;
+      background: var(--icon-bg, rgba(99, 102, 241, 0.15));
+      color: var(--card-accent, var(--accent-purple));
+    }
+    .role-card h3 {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .role-card p {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+    .btn-quick-login {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      background: var(--card-accent, var(--accent-purple));
+      color: #fff;
+      transition: all 0.2s ease;
+    }
+    .btn-quick-login:hover {
+      opacity: 0.9;
+      transform: scale(0.98);
+    }
+    .login-form-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 28px 36px;
+      max-width: 520px;
+      margin: 0 auto;
+      box-shadow: var(--shadow-lg);
+    }
+    @media (max-width: 900px) {
+      .role-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 550px) {
+      .role-grid { grid-template-columns: 1fr; }
+      .login-form-box { padding: 20px; }
+    }
+  </style>
+</head>
+
+<body style="display:block;background:var(--bg-primary);">
+  <div class="login-container">
+    
+    <!-- Top Brand Header -->
+    <div class="login-hero">
+      <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="brand-logo-icon" style="width:36px;height:36px;font-size:18px">✦</div>
+        <span style="font-family:var(--font-heading);font-size:20px;font-weight:800;color:var(--text-main)">NexusEdu AI</span>
+      </div>
+      <h1>Choose Role & Sign In</h1>
+      <p>Select your authorized role to access the corresponding workspace. 1-Click Demo Login is enabled for instant testing.</p>
+    </div>
+
+    <!-- Active Session & Switch Notice Banner -->
+    <div id="activeSessionBanner" style="display:none;margin-bottom:24px;padding:14px 20px;border-radius:var(--radius-lg);background:var(--bg-surface);border:1px solid var(--accent-purple);box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div id="bannerAvatar" style="font-size:22px;width:42px;height:42px;border-radius:var(--radius-md);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center">👤</div>
+        <div>
+          <span style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;display:block">Active Session Detected</span>
+          <b id="bannerUserName" style="font-size:14px;color:var(--text-main)">Logged in user</b>
+          <span id="bannerRoleBadge" class="badge-pill verified" style="margin-left:6px;font-size:11px">Role</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <a id="btnResumeSession" href="#" class="btn btn-primary" style="padding:8px 16px;font-size:12px">
+          Continue to Portal &rarr;
+        </a>
+        <button onclick="clearAndSwitchSession()" class="btn btn-outline" style="padding:8px 14px;font-size:12px">
+          Switch User
+        </button>
+      </div>
+    </div>
+
+    <!-- 4 Role Selection Cards -->
+    <div class="role-grid">
+      <!-- 1. STUDENT -->
+      <div class="role-card" id="roleCard-student" style="--card-accent:#6366f1;--icon-bg:rgba(99,102,241,0.15)">
+        <div class="role-icon-lg">🎓</div>
+        <h3>Student Portal</h3>
+        <p>View personal CGPA, attendance, LMS streaks, placement readiness & AI goal simulator.</p>
+        <a href="student-login.html" class="btn-quick-login" style="text-decoration:none;display:block;margin-bottom:8px">
+          Go to Student Login →
+        </a>
+        <button class="btn btn-outline" style="width:100%;font-size:11px;padding:6px" onclick="quickLogin('student', 'Priya Sharma', 'AIML-101', 'student.html')">
+          ⚡ 1-Click Demo Access
+        </button>
+      </div>
+
+      <!-- 2. FACULTY -->
+      <div class="role-card" id="roleCard-faculty" style="--card-accent:#10b981;--icon-bg:rgba(16,185,129,0.15)">
+        <div class="role-icon-lg">👨‍🏫</div>
+        <h3>Faculty Portal</h3>
+        <p>Monitor mentee CGPA, issue attendance shortage warnings & record counseling notes.</p>
+        <a href="faculty-login.html" class="btn-quick-login" style="background:#10b981;text-decoration:none;display:block;margin-bottom:8px">
+          Go to Faculty Login →
+        </a>
+        <button class="btn btn-outline" style="width:100%;font-size:11px;padding:6px" onclick="quickLogin('faculty', 'Dr. Arvind Rao', 'FAC-102', 'faculty.html')">
+          ⚡ 1-Click Demo Access
+        </button>
+      </div>
+
+      <!-- 3. PLACEMENT -->
+      <div class="role-card" id="roleCard-placement" style="--card-accent:#06b6d4;--icon-bg:rgba(6,182,212,0.15)">
+        <div class="role-icon-lg">💼</div>
+        <h3>Placement Cell</h3>
+        <p>Screen zero-backlog talent, run company drive simulators & export recruiter CSVs.</p>
+        <a href="placement-login.html" class="btn-quick-login" style="background:#06b6d4;text-decoration:none;display:block;margin-bottom:8px">
+          Go to Placement Login →
+        </a>
+        <button class="btn btn-outline" style="width:100%;font-size:11px;padding:6px" onclick="quickLogin('placement', 'Placement Officer', 'TPO-01', 'placement.html')">
+          ⚡ 1-Click Demo Access
+        </button>
+      </div>
+
+      <!-- 4. ADMINISTRATOR -->
+      <div class="role-card" id="roleCard-administrator" style="--card-accent:#8b5cf6;--icon-bg:rgba(139,92,246,0.15)">
+        <div class="role-icon-lg">🏛️</div>
+        <h3>Administrator</h3>
+        <p>Campus-wide CGPA analytics, accreditation KPIs, master CRUD & data reset.</p>
+        <a href="admin-login.html" class="btn-quick-login" style="background:#8b5cf6;text-decoration:none;display:block;margin-bottom:8px">
+          Go to Admin Login →
+        </a>
+        <button class="btn btn-outline" style="width:100%;font-size:11px;padding:6px" onclick="quickLogin('administrator', 'Dean of Academics', 'ADM-01', 'administrator.html')">
+          ⚡ 1-Click Demo Access
+        </button>
+      </div>
+    </div>
+
+    <!-- Standard Login Form -->
+    <div class="login-form-box">
+      <h3 style="font-family:var(--font-heading);font-size:18px;font-weight:700;margin-bottom:6px">Manual Sign In</h3>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:18px">Or enter credentials to sign into your institutional account:</p>
+
+      <form id="manualLoginForm" onsubmit="handleManualLogin(event)">
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Select Role</label>
+          <select class="form-input" id="loginRole" required onchange="handleRoleDropdownChange(this.value)">
+            <option value="student">🎓 Student</option>
+            <option value="faculty">👨‍🏫 Faculty Mentor</option>
+            <option value="placement">💼 Training & Placement Officer</option>
+            <option value="administrator" selected>🏛️ Institutional Administrator</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Email or Institutional ID</label>
+          <input type="text" class="form-input" id="loginId" placeholder="e.g. priya.s@campus.edu or AIML-101" required value="admin@campus.edu">
+        </div>
+
+        <div class="form-group" style="margin-bottom:20px">
+          <label>Password</label>
+          <input type="password" class="form-input" id="loginPass" value="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;font-size:14px">
+          Sign In to Portal →
+        </button>
+      </form>
+    </div>
+
+    <footer style="text-align:center;margin-top:36px;color:var(--text-muted);font-size:12px">
+      NexusEdu AI · Enterprise Academic Analytics & Early Warning Platform · ByteXL Nimbus & Netlify Ready
+    </footer>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="static/app.js"></script>
+  <script>
+    const roleUrls = {
+      student: "student.html",
+      faculty: "faculty.html",
+      placement: "placement.html",
+      administrator: "administrator.html"
+    };
+
+    const roleCredentials = {
+      student: { name: "Priya Sharma", id: "2024AIML001", email: "priya.sharma1@campus.edu" },
+      faculty: { name: "Dr. Arvind Rao", id: "FAC-102", email: "arvind.rao@campus.edu" },
+      placement: { name: "Placement Officer", id: "TPO-01", email: "placement@campus.edu" },
+      administrator: { name: "Dean of Academics", id: "ADM-01", email: "admin@campus.edu" }
+    };
+
+    function getTargetPortalUrl(role) {
+      const prefix = window.location.protocol.startsWith("http") ? "/" : "";
+      return prefix + (roleUrls[role] || "administrator.html");
+    }
+
+    function quickLogin(role, name, id, targetUrl) {
+      const user = { role, name, id, loggedInAt: new Date().toISOString() };
+      localStorage.setItem("nexus_auth_user", JSON.stringify(user));
+      localStorage.setItem("nexus_current_role", role);
+      if (typeof AuthManager !== "undefined" && AuthManager.setCurrentUser) {
+        try { AuthManager.setCurrentUser(role, name, id); } catch(e){}
+      }
+      showToast(`Signed in successfully as ${name} (${role.toUpperCase()})`, "success");
+      const destination = targetUrl ? (window.location.protocol.startsWith("http") ? "/" + targetUrl.replace(/^\//, "") : targetUrl) : getTargetPortalUrl(role);
+      setTimeout(() => {
+        window.location.href = destination;
+      }, 150);
+    }
+
+    function handleRoleDropdownChange(role) {
+      if (roleCredentials[role]) {
+        document.getElementById("loginId").value = roleCredentials[role].email;
+      }
+      highlightRoleCard(role);
+    }
+
+    function highlightRoleCard(role) {
+      document.querySelectorAll(".role-card").forEach(c => c.classList.remove("highlighted"));
+      const card = document.getElementById(`roleCard-${role}`);
+      if (card) {
+        card.classList.add("highlighted");
+      }
+    }
+
+    function handleManualLogin(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const role = document.getElementById("loginRole").value;
+      const id = document.getElementById("loginId").value;
+      const name = (roleCredentials[role] && roleCredentials[role].name) || "Authorized User";
+
+      const user = { role, name, id, loggedInAt: new Date().toISOString() };
+      localStorage.setItem("nexus_auth_user", JSON.stringify(user));
+      localStorage.setItem("nexus_current_role", role);
+      if (typeof AuthManager !== "undefined" && AuthManager.setCurrentUser) {
+        try { AuthManager.setCurrentUser(role, name, id); } catch(e){}
+      }
+      showToast(`Welcome ${user.name}! Entering ${role} portal...`, "success");
+      setTimeout(() => {
+        window.location.href = getTargetPortalUrl(role);
+      }, 150);
+      return false;
+    }
+
+    function clearAndSwitchSession() {
+      localStorage.removeItem("nexus_auth_user");
+      document.getElementById("activeSessionBanner").style.display = "none";
+      showToast("Session cleared. Please choose your role to sign in.", "info");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Check for requested role from URL query
+      const params = new URLSearchParams(window.location.search);
+      const reqRole = params.get("role");
+
+      if (reqRole && roleUrls[reqRole]) {
+        highlightRoleCard(reqRole);
+        const sel = document.getElementById("loginRole");
+        if (sel) {
+          sel.value = reqRole;
+          handleRoleDropdownChange(reqRole);
+        }
+        showToast(`Please authenticate to access the ${reqRole.toUpperCase()} Portal`, "info");
+      }
+
+      // 2. Check for existing active session
+      try {
+        const raw = localStorage.getItem("nexus_auth_user");
+        if (raw) {
+          const user = JSON.parse(raw);
+          if (user && user.role) {
+            const banner = document.getElementById("activeSessionBanner");
+            if (banner) {
+              banner.style.display = "flex";
+              document.getElementById("bannerUserName").textContent = `${user.name} (${user.id || user.role})`;
+              document.getElementById("bannerRoleBadge").textContent = `${user.role.toUpperCase()} PORTAL`;
+              const target = roleUrls[user.role] || "administrator.html";
+              document.getElementById("btnResumeSession").setAttribute("href", target);
+
+              const roleIcons = { student: "🎓", faculty: "👨‍🏫", placement: "💼", administrator: "🏛️" };
+              document.getElementById("bannerAvatar").textContent = roleIcons[user.role] || "👤";
+            }
+          }
+        }
+      } catch (err) {}
+    });
+  </script>
+</body>
+</html>

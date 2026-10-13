@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Academic & Career Hub | CAMU ERP Portal</title>
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+  <div class="app-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-section">
+        <div class="brand-logo-icon" style="background: linear-gradient(135deg, #6366f1, #818cf8);">🎓</div>
+        <div class="brand-info">
+          <h2>Student Portal</h2>
+          <span>CAMU Campus Hub</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-category">CAMU Modules</div>
+        <a href="#overview" class="nav-link active" onclick="switchCamuTab('tab-overview', document.querySelector('.camu-tab-btn:nth-child(1)'))"><i>▦</i> <span>Overview & Profile</span></a>
+        <a href="#timetable" class="nav-link" onclick="switchCamuTab('tab-timetable', document.querySelector('.camu-tab-btn:nth-child(2)'))"><i>📅</i> <span>Weekly Timetable</span></a>
+        <a href="#attendance" class="nav-link" onclick="switchCamuTab('tab-attendance', document.querySelector('.camu-tab-btn:nth-child(3)'))"><i>📊</i> <span>Attendance Register</span></a>
+        <a href="#results" class="nav-link" onclick="switchCamuTab('tab-results', document.querySelector('.camu-tab-btn:nth-child(4)'))"><i>🎓</i> <span>Semester Results & CGPA</span></a>
+        <a href="#courses" class="nav-link" onclick="switchCamuTab('tab-courses', document.querySelector('.camu-tab-btn:nth-child(5)'))"><i>📚</i> <span>Registered Courses</span></a>
+        <a href="#assignments" class="nav-link" onclick="switchCamuTab('tab-assignments', document.querySelector('.camu-tab-btn:nth-child(6)'))"><i>📝</i> <span>Assignments Tracker</span></a>
+        <a href="#fees" class="nav-link" onclick="switchCamuTab('tab-fees', document.querySelector('.camu-tab-btn:nth-child(7)'))"><i>💳</i> <span>Fee Status & Ledger</span></a>
+        <a href="#announcements" class="nav-link" onclick="switchCamuTab('tab-announcements', document.querySelector('.camu-tab-btn:nth-child(8)'))"><i>📢</i> <span>Circulars & Notices</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="env-pill">
+          <div class="env-status-dot" id="envStatusDot"></div>
+          <div class="env-pill-text">
+            <b id="envStatusText">CAMU Engine Active</b>
+            <span id="envStatusSub">100 Student Records</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1><span>Student Academic & Career Hub</span></h1>
+          <p>Integrated CAMU-style student academic portal: personal profile, timetable, subject attendance, semester CGPA progression, course syllabus, assignments, and online fee ledger.</p>
+        </div>
+
+        <div class="topbar-right">
+          <div id="userSessionPill" class="user-session-container"></div>
+          <button class="btn btn-icon" onclick="toggleTheme()" title="Toggle Dark/Light Mode"><span>🌓</span></button>
+        </div>
+      </header>
+
+      <!-- CAMU Active Student Switcher Bar (Switch between any of the 100 fictional students) -->
+      <section class="camu-student-switcher-bar">
+        <div class="camu-switcher-info">
+          <div class="camu-switcher-avatar" id="activeStuAvatar">PS</div>
+          <div class="camu-switcher-meta">
+            <b id="activeStuName">Priya Sharma</b>
+            <span id="activeStuSub">2024AIML001 · REG20247801 · CSE AIML · 3rd Year (Sem 6)</span>
+          </div>
+        </div>
+        <div class="camu-switcher-controls">
+          <span style="font-size:12px;color:var(--text-secondary);font-weight:600">Select Student Profile (100 Records):</span>
+          <select class="camu-select" id="camuStudentSelector" onchange="switchCamuStudent(this.value)">
+            <!-- Populated dynamically with all 100 students -->
+          </select>
+        </div>
+      </section>
+
+      <!-- CAMU ERP Horizontal Navigation Tabs -->
+      <nav class="camu-nav-tabs">
+        <button class="camu-tab-btn active" onclick="switchCamuTab('tab-overview', this)"><i>👤</i> <span>Profile & Overview</span></button>
+        <button class="camu-tab-btn" onclick="switchCamuTab('tab-timetable', this)"><i>📅</i> <span>Weekly Timetable</span></button>
+        <button class="camu-tab-btn" onclick="switchCamuTab('tab-attendance', this)"><i>📊</i> <span>Attendance Register</span></button>
+        <button class="camu-tab-btn" onclick="switchCamuTab('tab-results', this)"><i>🎓</i> <span>Semester Results & CGPA</span></button>
+        <button class="camu-tab-btn" onclick="switchCamuTab('tab-courses', this)"><i>📚</i> <span>Registered Courses</span></button>
+        <button class="camu-tab-btn" onclick="switchCamuTab('tab-assignments', this)"><i>📝</i> <span>Assignments</span></button>
+        <button class="camu-tab-btn" onclick="switchCamuTab('tab-fees', this)"><i>💳</i> <span>Fee Status & Ledger</span></button>
+        <button class="camu-tab-btn" onclick="switchCamuTab('tab-announcements', this)"><i>📢</i> <span>Circulars & Notices</span></button>
+      </nav>
+
+      <!-- ================= TAB 1: PROFILE & PERFORMANCE OVERVIEW ================= -->
+      <div class="camu-tab-pane" id="tab-overview" style="display:block">
+        
+        <!-- Student Hero Profile Banner -->
+        <section class="panel" style="margin-bottom:24px;background:linear-gradient(135deg, rgba(99,102,241,0.12), rgba(6,182,212,0.06));border:1px solid rgba(99,102,241,0.25)">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px">
+            <div style="display:flex;align-items:center;gap:18px">
+              <div class="avatar" id="stuAvatar" style="width:64px;height:64px;font-size:24px;box-shadow:0 0 20px var(--accent-purple-glow)">PS</div>
+              <div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <h2 style="font-family:var(--font-heading);font-size:22px;font-weight:800" id="stuName">Priya Sharma</h2>
+                  <span class="status-badge green" id="stuStatusBadge">On track</span>
+                </div>
+                <p style="font-size:12px;color:var(--text-secondary);margin-top:2px">
+                  <span id="stuRoll">2024AIML001</span> · <span id="stuDept" style="color:var(--accent-cyan);font-weight:600">CSE AIML</span>
+                </p>
+                <p style="font-size:11px;color:var(--text-muted);margin-top:2px" id="stuMentor">
+                  Faculty Mentor: Dr. Arvind Rao (arvind.rao@campus.edu)
+                </p>
+              </div>
+            </div>
+
+            <!-- Quick Metrics Ribbon -->
+            <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+              <div style="background:var(--bg-card);padding:10px 16px;border-radius:var(--radius-md);border:1px solid var(--border-subtle);text-align:center">
+                <small style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:700">Cumulative CGPA</small>
+                <b style="display:block;font-size:20px;color:var(--accent-purple-light);font-family:var(--font-heading)" id="stuCgpa">9.24 / 10.0</b>
+              </div>
+              <div style="background:var(--bg-card);padding:10px 16px;border-radius:var(--radius-md);border:1px solid var(--border-subtle);text-align:center">
+                <small style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:700">Overall Attendance</small>
+                <b style="display:block;font-size:20px;color:var(--color-green);font-family:var(--font-heading)" id="stuAttendance">94%</b>
+              </div>
+              <div style="background:var(--bg-card);padding:10px 16px;border-radius:var(--radius-md);border:1px solid var(--border-subtle);text-align:center">
+                <small style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:700">AI Success Index</small>
+                <b style="display:block;font-size:20px;color:var(--accent-cyan);font-family:var(--font-heading)" id="stuScore">92.4 / 100</b>
+              </div>
+              <button class="btn btn-primary" onclick="openStudentDrawer(activeCamuStudent ? activeCamuStudent.id : 1)" style="font-size:12px;padding:8px 14px">
+                👁 View 360 Diagnostic
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7 DATA CATEGORIES SECTION GRID -->
+        <div class="cat-card-grid">
+          
+          <!-- 1. ACADEMIC PERFORMANCE CARD -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <span class="cat-tag cat-academic">Category 1 · Academic</span>
+                <h3 style="margin-top:6px">Academic & Subject Scores</h3>
+              </div>
+              <span class="badge-pill" id="stuBacklogBadge">0 Backlogs Cleared</span>
+            </div>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+              <div style="background:var(--bg-surface);padding:10px;border-radius:8px">
+                <small style="font-size:10px;color:var(--text-muted)">Latest Exam Marks</small>
+                <b style="font-size:18px;display:block;color:var(--text-main)" id="stuMarks">92/100</b>
+              </div>
+              <div style="background:var(--bg-surface);padding:10px;border-radius:8px">
+                <small style="font-size:10px;color:var(--text-muted)">Prior Midterm Delta</small>
+                <b style="font-size:18px;display:block;color:var(--color-green)" id="stuDelta">+4.0 pts</b>
+              </div>
+            </div>
+
+            <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px">Registered Coursework Scores:</div>
+            <div id="stuSubjectList" style="display:flex;flex-direction:column;gap:8px">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- 2. ATTENDANCE TRACKER CARD -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <span class="cat-tag cat-attendance">Category 2 · Attendance</span>
+                <h3 style="margin-top:6px">Attendance Compliance</h3>
+              </div>
+              <span class="badge-pill" id="stuAttCompliance">Compliant (&ge; 75%)</span>
+            </div>
+
+            <div style="background:var(--bg-surface);padding:14px;border-radius:var(--radius-md);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
+              <div>
+                <small style="font-size:10px;color:var(--text-muted);text-transform:uppercase">Lectures Attended</small>
+                <b style="font-size:20px;display:block;color:var(--text-main)" id="stuAttCount">85 / 90 Classes</b>
+              </div>
+              <div style="text-align:right">
+                <small style="font-size:10px;color:var(--text-muted);text-transform:uppercase">University Cutoff Status</small>
+                <b style="font-size:14px;color:var(--color-green);display:block">Eligible for Semester Finals</b>
+              </div>
+            </div>
+
+            <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px">Subject-wise Attendance Breakdown:</div>
+            <div id="stuSubjectAttList" style="display:flex;flex-direction:column;gap:8px">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- 3. LMS & DIGITAL LEARNING CARD -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <span class="cat-tag cat-lms">Category 3 · LMS</span>
+                <h3 style="margin-top:6px">LMS Activity & Submissions</h3>
+              </div>
+              <span class="badge-pill">Active Learner</span>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+              <div style="background:var(--bg-surface);padding:10px;border-radius:8px">
+                <small style="font-size:10px;color:var(--text-muted)">Login Frequency</small>
+                <b style="font-size:18px;display:block" id="stuLmsLogins">95 Logins</b>
+                <span style="font-size:10px;color:var(--color-green)">🔥 14-day study streak</span>
+              </div>
+              <div style="background:var(--bg-surface);padding:10px;border-radius:8px">
+                <small style="font-size:10px;color:var(--text-muted)">Assignment Rate</small>
+                <b style="font-size:18px;display:block" id="stuAssignRate">96% Done</b>
+                <span style="font-size:10px;color:var(--text-muted)">4 Semester Tasks</span>
+              </div>
+            </div>
+
+            <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px">Faculty Advisory Memo:</div>
+            <p style="font-size:11px;color:var(--text-secondary);line-height:1.4;background:var(--bg-surface);padding:10px;border-radius:6px;font-style:italic" id="stuFacultyNote">
+              Loading automated AI advisor notes...
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ================= TAB 2: WEEKLY TIMETABLE ================= -->
+      <div class="camu-tab-pane" id="tab-timetable" style="display:none">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Weekly Master Timetable & Class Schedule</h3>
+              <p>CAMU Time-Slot Grid: 5 periods daily across lecture halls and specialized computing laboratories.</p>
+            </div>
+            <button class="btn btn-secondary" onclick="window.print()" style="font-size:11px">🖨️ Print Timetable</button>
+          </div>
+          <div id="camuTimetableContainer">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= TAB 3: ATTENDANCE REGISTER ================= -->
+      <div class="camu-tab-pane" id="tab-attendance" style="display:none">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Subject-Wise Attendance Register & Leave Requests</h3>
+              <p>Official course-level attendance percentage, university 75% cutoff threshold, and online On-Duty (OD) / Leave application portal.</p>
+            </div>
+            <button class="btn btn-primary" onclick="openLeaveRequestModal('GENERAL', 'Semester Coursework')" style="font-size:11px">
+              ✍️ Submit Leave / OD Request
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Course Code</th>
+                  <th>Course Title & Faculty</th>
+                  <th>Total Classes</th>
+                  <th>Classes Attended</th>
+                  <th>Attendance %</th>
+                  <th>Compliance Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="camuAttendanceTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= TAB 4: SEMESTER RESULTS & CGPA ================= -->
+      <div class="camu-tab-pane" id="tab-results" style="display:none">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Semester Results, SGPA History & Grade Sheet</h3>
+              <p>Continuous internal assessment marks, semester-wise Grade Point Averages (SGPA), and Cumulative CGPA transcript.</p>
+            </div>
+            <button class="btn btn-secondary" onclick="showToast('Official Grade Sheet PDF generated!', 'success')" style="font-size:11px">
+              📥 Download Grade Sheet (PDF)
+            </button>
+          </div>
+
+          <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:10px">Semester-wise SGPA Progression:</div>
+          <div class="camu-sgpa-cards" id="camuSgpaCardsContainer">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:10px">Current Semester Subject Grades:</div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Course Code</th>
+                  <th>Subject Title</th>
+                  <th>Credits</th>
+                  <th>Internal Marks (100)</th>
+                  <th>Final Grade</th>
+                  <th>Result</th>
+                </tr>
+              </thead>
+              <tbody id="camuGradesTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= TAB 5: REGISTERED COURSES ================= -->
+      <div class="camu-tab-pane" id="tab-courses" style="display:none">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Registered Academic Courses & Syllabus Coverage</h3>
+              <p>Curriculum syllabus progress, assigned faculty instructors, credit weights, and course resources.</p>
+            </div>
+          </div>
+          <div class="camu-courses-grid" id="camuCoursesGrid">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= TAB 6: ASSIGNMENTS & SUBMISSIONS ================= -->
+      <div class="camu-tab-pane" id="tab-assignments" style="display:none">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Course Assignments & Continuous Assessments</h3>
+              <p>Track problem sets, lab reports, submission deadlines, grading feedback, and upload solutions.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Assignment ID</th>
+                  <th>Course</th>
+                  <th>Assignment Title</th>
+                  <th>Due Date</th>
+                  <th>Status</th>
+                  <th>Grading Score</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="camuAssignmentsTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= TAB 7: FEE STATUS & LEDGER ================= -->
+      <div class="camu-tab-pane" id="tab-fees" style="display:none">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Campus Fee Ledger & Online Payment Portal</h3>
+              <p>Itemized breakdown of tuition fees, university exam charges, computing lab amenities, payment receipts, and balance dues.</p>
+            </div>
+          </div>
+          <div id="camuFeeLedgerContainer">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= TAB 8: CIRCULARS & NOTICES ================= -->
+      <div class="camu-tab-pane" id="tab-announcements" style="display:none">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Official Campus Circulars & Academic Notices</h3>
+              <p>Timetable updates, campus placement notices, symposium announcements, and administrative guidelines.</p>
+            </div>
+          </div>
+          <div id="camuAnnouncementsContainer">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+      </div>
+
+      <!-- Footer -->
+      <footer style="margin-top:auto;text-align:center;padding:24px 0 10px;color:var(--text-muted);font-size:12px">
+        NexusEdu AI · Modern CAMU-Style College ERP & SIS Engine · 100 Fictional Students Suite.
+      </footer>
+    </main>
+  </div>
+
+  <!-- STUDENT 360° DIAGNOSTIC PROFILE MODAL -->
+  <div class="modal-backdrop" id="studentDrawerModal">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h3><span>✦ Student 360° Diagnostic Profile</span></h3>
+        <button class="modal-close" onclick="closeStudentDrawer()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="profile-hero">
+          <div class="profile-avatar-lg" id="drawerInitials">PS</div>
+          <div class="profile-details" style="flex:1">
+            <h2 id="drawerName">Priya Sharma</h2>
+            <p id="drawerRoll">2024AIML001 · REG20247801</p>
+            <p id="drawerDept" style="color:var(--accent-cyan);font-weight:600">CSE AIML</p>
+            <p id="drawerMentor" style="color:var(--text-muted);font-size:11px">Faculty Mentor: Dr. Arvind Rao</p>
+          </div>
+          <div style="text-align:right">
+            <small style="color:var(--text-muted);font-size:10px;text-transform:uppercase;display:block">AI Success Index</small>
+            <div style="font-size:32px;font-weight:800;font-family:var(--font-heading);color:var(--accent-purple-light)" id="drawerScore">92.4</div>
+            <span class="status-badge green" id="drawerStatus">On track</span>
+          </div>
+        </div>
+        <div id="drawer7CategoriesContainer"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="window.print()">🖨️ Print Student Report</button>
+        <button class="btn btn-primary" onclick="closeStudentDrawer()">Close Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="static/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(initCamuStudentPortal, 250);
+    });
+  </script>
+</body>
+</html>

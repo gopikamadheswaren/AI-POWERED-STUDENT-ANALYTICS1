@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Portal | CAMU Mentorship & Class Analytics</title>
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍🏫</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+  <div class="app-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-section">
+        <div class="brand-logo-icon" style="background: linear-gradient(135deg, #10b981, #059669);">👨‍🏫</div>
+        <div class="brand-info">
+          <h2>Faculty Portal</h2>
+          <span>CAMU Workstation</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-category">Faculty Workstation</div>
+        <a href="#overview" class="nav-link active"><i>▦</i> <span>Assigned Student Roster</span></a>
+        <a href="#attendanceRegister" class="nav-link"><i>📅</i> <span>Daily Attendance Register</span></a>
+        <a href="#marksEntry" class="nav-link"><i>📝</i> <span>Internal Marks Entry</span></a>
+        <a href="#academicWatch" class="nav-link"><i>⚠️</i> <span>At-Risk & Debarment Watch</span></a>
+        <a href="#counselingSection" class="nav-link"><i>💬</i> <span>1-on-1 Mentorship Logs</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="env-pill">
+          <div class="env-status-dot" id="envStatusDot" style="background:#10b981;box-shadow:0 0 10px #10b981"></div>
+          <div class="env-pill-text">
+            <b>Faculty Advisory Engine</b>
+            <span>Class Counselor Mode</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1><span>Faculty Mentorship & Class Analytics Portal</span></h1>
+          <p>Integrated CAMU-style faculty workstation: view assigned student cohorts, mark daily lecture attendance with P/A/OD toggles, enter continuous internal assessment marks, and log mentorship remarks.</p>
+        </div>
+
+        <div class="topbar-right">
+          <div id="userSessionPill" class="user-session-container"></div>
+          <button class="btn btn-primary" onclick="openCounselingModal()" style="background:linear-gradient(135deg, #10b981, #059669)">
+            <span>✍️ Log Counseling Note</span>
+          </button>
+          <button class="btn btn-secondary" onclick="exportCounselorReport()">
+            <span>📥 Export Mentee CSV</span>
+          </button>
+          <button class="btn btn-icon" onclick="toggleTheme()" title="Toggle Dark/Light Mode"><span>🌓</span></button>
+        </div>
+      </header>
+
+      <!-- Faculty Hero Banner -->
+      <section class="panel" style="margin-bottom:24px;background:linear-gradient(135deg, rgba(16,185,129,0.12), rgba(6,182,212,0.06));border:1px solid rgba(16,185,129,0.25)">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px">
+          <div style="display:flex;align-items:center;gap:18px">
+            <div class="avatar" style="width:60px;height:60px;font-size:22px;background:linear-gradient(135deg, #10b981, #06b6d4)">DR</div>
+            <div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <h2 style="font-family:var(--font-heading);font-size:22px;font-weight:800">Dr. Arvind Rao</h2>
+                <span class="badge-pill verified">Senior Faculty & Department Mentor</span>
+              </div>
+              <p style="font-size:12px;color:var(--text-secondary);margin-top:2px">
+                Professor · Department of Computer Science & Engineering (AI & ML)
+              </p>
+              <p style="font-size:11px;color:var(--text-muted);margin-top:2px">
+                Handling: AI301 (Machine Learning), CS302 (Algorithms) · Campus Total: 100 Students Enrolled
+              </p>
+            </div>
+          </div>
+
+          <!-- Faculty Quick KPIs -->
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <div style="background:var(--bg-card);padding:10px 16px;border-radius:var(--radius-md);border:1px solid var(--border-subtle);text-align:center">
+              <small style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:700">Campus Cohort</small>
+              <b style="display:block;font-size:20px;color:var(--text-main);font-family:var(--font-heading)" id="facTotalMentees">100</b>
+            </div>
+            <div style="background:var(--bg-card);padding:10px 16px;border-radius:var(--radius-md);border:1px solid var(--border-subtle);text-align:center">
+              <small style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:700">Class Attendance Avg</small>
+              <b style="display:block;font-size:20px;color:var(--color-green);font-family:var(--font-heading)" id="facClassAtt">78.5%</b>
+            </div>
+            <div style="background:var(--bg-card);padding:10px 16px;border-radius:var(--radius-md);border:1px solid var(--border-subtle);text-align:center">
+              <small style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:700">Critical Cases</small>
+              <b style="display:block;font-size:20px;color:var(--color-rose);font-family:var(--font-heading)" id="facCriticalCount">18</b>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Department Filter Pills for Faculty Workspace -->
+      <section style="display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+        <span style="font-size:12px;font-weight:700;color:var(--text-secondary)">Filter Department Cohort:</span>
+        <button class="pill-btn active" onclick="document.querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');switchFacultyDept('CSE AIML')">CSE AIML</button>
+        <button class="pill-btn" onclick="document.querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');switchFacultyDept('CSBS')">CSBS</button>
+        <button class="pill-btn" onclick="document.querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');switchFacultyDept('CSE Core')">CSE Core</button>
+        <button class="pill-btn" onclick="document.querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');switchFacultyDept('IT')">IT</button>
+        <button class="pill-btn" onclick="document.querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');switchFacultyDept('ECE')">ECE</button>
+        <button class="pill-btn" onclick="document.querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');switchFacultyDept('All')">All 100 Students</button>
+      </section>
+
+      <!-- 1. CAMU DAILY ATTENDANCE REGISTER (P / A / OD TOGGLES) -->
+      <section class="panel" id="attendanceRegister" style="margin-bottom:24px">
+        <div class="panel-header">
+          <div>
+            <h3>CAMU Daily Lecture Attendance Register</h3>
+            <p>Select date & course, toggle Present (P), Absent (A), or On Duty (OD) for each student, and submit directly to university records.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="issueBatchAttendanceWarning()" style="font-size:11px">
+            ⚠️ Issue Shortage Notices (&lt;75%)
+          </button>
+        </div>
+        <div id="facAttendanceRegisterContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- 2. CONTINUOUS INTERNAL ASSESSMENT (CIA) MARKS ENTRY -->
+      <section class="panel" id="marksEntry" style="margin-bottom:24px">
+        <div class="panel-header">
+          <div>
+            <h3>Continuous Internal Assessment (CIA) & Midterm Marks Entry</h3>
+            <p>Input internal test scores, calculate grade point variations, and update student cumulative CGPAs instantly.</p>
+          </div>
+        </div>
+        <div id="facInternalMarksContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- 3. ASSIGNED STUDENT ROSTER & PERFORMANCE WATCHLIST -->
+      <section class="panel table-panel" id="overview" style="margin-bottom:24px">
+        <div class="panel-header">
+          <div>
+            <h3>Assigned Student Directory & Performance Matrix</h3>
+            <p>Review student CGPA, exam scores, attendance percentages, standing backlogs, and inspect 360° diagnostic profiles.</p>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Branch</th>
+                <th>Year</th>
+                <th>CGPA</th>
+                <th>Attendance</th>
+                <th>Marks</th>
+                <th>Backlogs</th>
+                <th>AI Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="facMenteeTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 4. AT-RISK WATCHLIST -->
+      <section class="panel" id="academicWatch" style="margin-bottom:24px">
+        <div class="panel-header">
+          <div>
+            <h3>Academic Interventions & Attendance Shortage Watchlist</h3>
+            <p>Students flagged with marks below 60, standing backlogs, or attendance under 75%.</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px" id="facAcademicWatchlist">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer style="margin-top:auto;text-align:center;padding:24px 0 10px;color:var(--text-muted);font-size:12px">
+        NexusEdu AI · Faculty Mentorship & CAMU Class Station · 100 Fictional Students Suite.
+      </footer>
+    </main>
+  </div>
+
+  <!-- COUNSELING NOTE MODAL -->
+  <div class="modal-backdrop" id="counselingModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><span>✍️ Log 1-on-1 Mentorship Counseling Note</span></h3>
+        <button class="modal-close" onclick="closeCounselingModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Select Mentee</label>
+          <select class="form-input" id="counselStudentSelect">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Counseling Focus Area</label>
+          <select class="form-input" id="counselFocus">
+            <option value="Attendance Recovery">Attendance Shortage (&lt;75%)</option>
+            <option value="Academic Remediation">Midterm Marks Drop & Subject Doubts</option>
+            <option value="Backlog Clearance">Semester Backlog Clearance Strategy</option>
+            <option value="Placement Career Prep">Aptitude & Technical Interview Readiness</option>
+            <option value="General Wellbeing">Personal Counseling & Peer Mentoring</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Faculty Remarks & Agreed Action Plan</label>
+          <textarea class="form-input" id="counselRemarks" rows="4" placeholder="Enter specific targets discussed with student..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeCounselingModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveCounselingNote()">Save Note & Notify Student</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STUDENT 360° PROFILE MODAL -->
+  <div class="modal-backdrop" id="studentDrawerModal">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h3><span>✦ Student 360° Diagnostic Profile</span></h3>
+        <button class="modal-close" onclick="closeStudentDrawer()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="profile-hero">
+          <div class="profile-avatar-lg" id="drawerInitials">PS</div>
+          <div class="profile-details" style="flex:1">
+            <h2 id="drawerName">Priya Sharma</h2>
+            <p id="drawerRoll">2024AIML001</p>
+            <p id="drawerDept" style="color:var(--accent-cyan);font-weight:600">CSE AIML</p>
+            <p id="drawerMentor" style="color:var(--text-muted);font-size:11px">Mentor: Dr. Arvind Rao</p>
+          </div>
+          <div style="text-align:right">
+            <small style="color:var(--text-muted);font-size:10px;text-transform:uppercase;display:block">AI Success Index</small>
+            <div style="font-size:32px;font-weight:800;font-family:var(--font-heading);color:var(--accent-purple-light)" id="drawerScore">92.4</div>
+            <span class="status-badge green" id="drawerStatus">On track</span>
+          </div>
+        </div>
+        <div id="drawer7CategoriesContainer"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="window.print()">🖨️ Print Student Report</button>
+        <button class="btn btn-primary" onclick="closeStudentDrawer()">Close Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="static/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        initCamuFacultyPortal();
+        const counselSelect = document.getElementById("counselStudentSelect");
+        if (counselSelect && studentsData.length) {
+          counselSelect.innerHTML = studentsData.map(s => `
+            <option value="${s.id}">${s.roll_no} - ${s.name} (${s.department})</option>
+          `).join("");
+        }
+      }, 250);
+    });
+  </script>
+</body>
+</html>

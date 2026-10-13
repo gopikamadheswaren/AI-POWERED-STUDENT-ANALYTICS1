@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placement Sign In | NexusEdu AI Success Platform</title>
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💼</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/style.css">
+  
+  <style>
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      background: radial-gradient(circle at 50% 20%, rgba(6, 182, 212, 0.12), transparent 60%), var(--bg-primary);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg-card);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+      border-radius: var(--radius-xl);
+      padding: 32px 28px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(6, 182, 212, 0.15);
+      position: relative;
+    }
+    .auth-role-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: var(--bg-surface);
+      padding: 5px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      border: 1px solid var(--border-subtle);
+    }
+    .auth-role-tab {
+      padding: 8px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .auth-role-tab:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .auth-role-tab.active {
+      background: #06b6d4;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(6, 182, 212, 0.4);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(6, 182, 212, 0.15);
+      color: #22d3ee;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+    .auth-header h1 {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .auth-header p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .demo-login-box {
+      background: var(--bg-surface);
+      border: 1px dashed rgba(6, 182, 212, 0.35);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+    .demo-login-box p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .btn-quick-tpo {
+      width: 100%;
+      padding: 10px;
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+    }
+    .btn-quick-tpo:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 11px;
+      margin: 18px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+    .back-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 12px;
+      text-decoration: none;
+      margin-top: 18px;
+      transition: color 0.2s;
+    }
+    .back-hub-link:hover {
+      color: var(--text-main);
+    }
+  </style>
+</head>
+
+<body style="display:block;margin:0;">
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <!-- 4 Role Login Switcher Tabs -->
+      <div class="auth-role-tabs">
+        <a href="student-login.html" class="auth-role-tab">🎓 Student</a>
+        <a href="faculty-login.html" class="auth-role-tab">👨‍🏫 Faculty</a>
+        <a href="placement-login.html" class="auth-role-tab active">💼 Placement</a>
+        <a href="admin-login.html" class="auth-role-tab">🏛️ Admin</a>
+      </div>
+
+      <div class="auth-header">
+        <div class="auth-role-badge">💼 Training & Placement Cell</div>
+        <h1>Placement Officer Sign In</h1>
+        <p>Screen zero-backlog candidates, simulate company recruitment drives & generate recruiter shortlist CSV rosters.</p>
+      </div>
+
+      <!-- Quick 1-Click Demo Login for Testing -->
+      <div class="demo-login-box">
+        <p>Institutional 1-Click Fast Access (TPO Officer):</p>
+        <button class="btn-quick-tpo" onclick="quickTpoLogin('Placement Officer', 'TPO-01')">
+          ⚡ 1-Click Login as Training & Placement Officer
+        </button>
+      </div>
+
+      <div class="auth-divider">Or TPO Officer Credentials</div>
+
+      <!-- Manual Login Form -->
+      <form onsubmit="handleTpoFormLogin(event); return false;">
+        <div class="form-group" style="margin-bottom:14px">
+          <label>TPO Officer ID or Corporate Relations Email</label>
+          <input type="text" class="form-input" id="tpoIdInput" placeholder="e.g. TPO-01 or placement@campus.edu" value="placement@campus.edu" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Active Recruitment Drive Session</label>
+          <select class="form-input" id="tpoSessionInput">
+            <option value="2026-Phase1">Campus Recruitment Season 2026 (Phase 1)</option>
+            <option value="2026-Intern">Pre-Placement Summer Internships</option>
+            <option value="2025-OffCampus">Off-Campus Pool Clearance</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom:20px">
+          <label>Placement Portal Password</label>
+          <input type="password" class="form-input" id="tpoPasswordInput" value="••••••••" required>
+        </div>
+
+        <button type="submit" id="btnPlacementSubmit" class="btn btn-primary" style="width:100%;padding:12px;font-size:14px;background:#06b6d4">
+          Sign In to Placement Portal →
+        </button>
+      </form>
+
+      <div style="text-align:center">
+        <a href="login.html" class="back-hub-link">← Return to Campus Portal Selector</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="static/app.js"></script>
+  <script>
+    function quickTpoLogin(name, id) {
+      const user = { role: "placement", name: name || "Placement Officer", id: id || "TPO-01", loggedInAt: new Date().toISOString() };
+      localStorage.setItem("nexus_auth_user", JSON.stringify(user));
+      localStorage.setItem("nexus_current_role", "placement");
+      if (typeof AuthManager !== "undefined" && AuthManager.setCurrentUser) {
+        try { AuthManager.setCurrentUser("placement", user.name, user.id); } catch(e){}
+      }
+      const dest = window.location.protocol.startsWith("http") ? "/placement.html" : "placement.html";
+      window.location.href = dest;
+    }
+
+    function handleTpoFormLogin(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const idEl = document.getElementById("tpoIdInput");
+      const idVal = (idEl && idEl.value.trim()) ? idEl.value.trim() : "TPO-01";
+      const user = { role: "placement", name: "Placement Officer", id: idVal, loggedInAt: new Date().toISOString() };
+      localStorage.setItem("nexus_auth_user", JSON.stringify(user));
+      localStorage.setItem("nexus_current_role", "placement");
+      if (typeof AuthManager !== "undefined" && AuthManager.setCurrentUser) {
+        try { AuthManager.setCurrentUser("placement", user.name, user.id); } catch(e){}
+      }
+      const dest = window.location.protocol.startsWith("http") ? "/placement.html" : "placement.html";
+      window.location.href = dest;
+      return false;
+    }
+  </script>
+</body>
+</html>

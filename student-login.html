@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Sign In | NexusEdu AI Success Platform</title>
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/style.css">
+  
+  <style>
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      background: radial-gradient(circle at 50% 20%, rgba(99, 102, 241, 0.12), transparent 60%), var(--bg-primary);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg-card);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: var(--radius-xl);
+      padding: 32px 28px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(99, 102, 241, 0.15);
+      position: relative;
+    }
+    .auth-role-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: var(--bg-surface);
+      padding: 5px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      border: 1px solid var(--border-subtle);
+    }
+    .auth-role-tab {
+      padding: 8px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .auth-role-tab:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .auth-role-tab.active {
+      background: #6366f1;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+    .auth-header h1 {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .auth-header p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .demo-login-box {
+      background: var(--bg-surface);
+      border: 1px dashed rgba(99, 102, 241, 0.35);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+    .demo-login-box p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .btn-quick-stu {
+      width: 100%;
+      padding: 10px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+    .btn-quick-stu:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 11px;
+      margin: 18px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+    .back-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 12px;
+      text-decoration: none;
+      margin-top: 18px;
+      transition: color 0.2s;
+    }
+    .back-hub-link:hover {
+      color: var(--text-main);
+    }
+  </style>
+</head>
+
+<body style="display:block;margin:0;">
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <!-- 4 Role Login Switcher Tabs -->
+      <div class="auth-role-tabs">
+        <a href="student-login.html" class="auth-role-tab active">🎓 Student</a>
+        <a href="faculty-login.html" class="auth-role-tab">👨‍🏫 Faculty</a>
+        <a href="placement-login.html" class="auth-role-tab">💼 Placement</a>
+        <a href="admin-login.html" class="auth-role-tab">🏛️ Admin</a>
+      </div>
+
+      <div class="auth-header">
+        <div class="auth-role-badge">🎓 Student Success Portal</div>
+        <h1>Student Sign In</h1>
+        <p>Access your personal CGPA transcript, attendance compliance, LMS activity streaks & AI career roadmap.</p>
+      </div>
+
+      <!-- Quick 1-Click Demo Login for Testing -->
+      <div class="demo-login-box">
+        <p>Institutional 1-Click Fast Access (Demo Student):</p>
+        <button class="btn-quick-stu" onclick="quickStudentLogin('Priya Sharma', '2024AIML001', 9.24)">
+          ⚡ 1-Click Login as Priya Sharma (2024AIML001 · CGPA 9.24)
+        </button>
+      </div>
+
+      <div class="auth-divider">Or Student Credentials</div>
+
+      <!-- Manual Login Form -->
+      <form onsubmit="handleStudentFormLogin(event); return false;">
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Student Roll Number or Campus Email</label>
+          <input type="text" class="form-input" id="studentRollInput" placeholder="e.g. 2024AIML001 or priya.sharma1@campus.edu" value="2024AIML001" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom:20px">
+          <label>Student Portal Password</label>
+          <input type="password" class="form-input" id="studentPasswordInput" value="••••••••" required>
+        </div>
+
+        <button type="submit" id="btnStudentSubmit" class="btn btn-primary" style="width:100%;padding:12px;font-size:14px;background:#6366f1">
+          Sign In to Student Portal →
+        </button>
+      </form>
+
+      <div style="text-align:center">
+        <a href="login.html" class="back-hub-link">← Return to Campus Portal Selector</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="static/app.js"></script>
+  <script>
+    function quickStudentLogin(name, rollNo, cgpa) {
+      const user = { role: "student", name: name || "Priya Sharma", id: rollNo || "2024AIML001", loggedInAt: new Date().toISOString() };
+      localStorage.setItem("nexus_auth_user", JSON.stringify(user));
+      localStorage.setItem("nexus_current_role", "student");
+      if (typeof AuthManager !== "undefined" && AuthManager.setCurrentUser) {
+        try { AuthManager.setCurrentUser("student", user.name, user.id); } catch(e){}
+      }
+      const dest = window.location.protocol.startsWith("http") ? "/student.html" : "student.html";
+      window.location.href = dest;
+    }
+
+    function handleStudentFormLogin(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const rollInput = document.getElementById("studentRollInput") ? document.getElementById("studentRollInput").value.trim().toLowerCase() : "2024aiml001";
+      
+      let student = (typeof studentsData !== 'undefined' && studentsData.length)
+        ? studentsData.find(s => 
+            (s.roll_no && s.roll_no.toLowerCase() === rollInput) || 
+            (s.email && s.email.toLowerCase() === rollInput) ||
+            s.name.toLowerCase().includes(rollInput)
+          )
+        : null;
+
+      const name = student ? student.name : "Priya Sharma";
+      const roll = student ? student.roll_no : "2024AIML001";
+
+      const user = { role: "student", name: name, id: roll, loggedInAt: new Date().toISOString() };
+      localStorage.setItem("nexus_auth_user", JSON.stringify(user));
+      localStorage.setItem("nexus_current_role", "student");
+      if (typeof AuthManager !== "undefined" && AuthManager.setCurrentUser) {
+        try { AuthManager.setCurrentUser("student", name, roll); } catch(e){}
+      }
+      const dest = window.location.protocol.startsWith("http") ? "/student.html" : "student.html";
+      window.location.href = dest;
+      return false;
+    }
+  </script>
+</body>
+</html>

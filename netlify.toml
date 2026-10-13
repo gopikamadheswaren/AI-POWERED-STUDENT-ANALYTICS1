@@ -1,0 +1,105 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/student-login"
+  to = "/student-login.html"
+  status = 200
+
+[[redirects]]
+  from = "/faculty-login"
+  to = "/faculty-login.html"
+  status = 200
+
+[[redirects]]
+  from = "/facalty-login"
+  to = "/faculty-login.html"
+  status = 200
+
+[[redirects]]
+  from = "/placement-login"
+  to = "/placement-login.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin-login"
+  to = "/admin-login.html"
+  status = 200
+
+[[redirects]]
+  from = "/adminstator-login"
+  to = "/admin-login.html"
+  status = 200
+
+[[redirects]]
+  from = "/login-pages"
+  to = "/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/loginpages"
+  to = "/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/login-page"
+  to = "/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/logins"
+  to = "/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/student"
+  to = "/student.html"
+  status = 200
+
+[[redirects]]
+  from = "/faculty"
+  to = "/faculty.html"
+  status = 200
+
+[[redirects]]
+  from = "/facalty"
+  to = "/faculty.html"
+  status = 200
+
+[[redirects]]
+  from = "/placement"
+  to = "/placement.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/administrator.html"
+  status = 200
+
+[[redirects]]
+  from = "/administrator"
+  to = "/administrator.html"
+  status = 200
+
+[[redirects]]
+  from = "/adminstator"
+  to = "/administrator.html"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/login.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
